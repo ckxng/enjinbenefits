@@ -24,6 +24,9 @@ public class EnjinBenefitsMod {
     /** The key provided by the Enjin admin panel - SECRET! */
     public static String enjinKey = "";
     
+    /** The API URL provided by the Enjin admin panel */
+    public static String enjinApiUrl = "https://example.enjin.com/api";
+    
     /**
      * 
      * @param event
@@ -32,9 +35,12 @@ public class EnjinBenefitsMod {
     public void preInit(FMLPreInitializationEvent event) {
             Configuration config = new Configuration(event.getSuggestedConfigurationFile());
             config.load();
-            
+
             enjinKey = config.getString("enjinKey", "api", enjinKey, 
             		"The key provided by the Enjin admin panel - SECRET!");
+
+            enjinApiUrl = config.getString("enjinApiUrl", "api", enjinApiUrl, 
+            		"The API URL provided by the Enjin admin panel");
             
             config.save();
             
