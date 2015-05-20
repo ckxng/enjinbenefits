@@ -1,0 +1,16 @@
+[
+{
+  "modid": "enjinbenefits",
+  "name": "Enjin Benefits",
+  "description": "Giving benefits to players based on Enjin points in 1.7.10",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["ckxng"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]

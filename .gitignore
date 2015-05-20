@@ -1,0 +1,12 @@
+# exclude all
+/*
+
+# include markdowns
+!README.md
+!LICENSE.txt
+
+# include sourcecode
+!src/
+
+# include git important files
+!.gitignore
