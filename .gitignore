@@ -5,6 +5,12 @@
 !README.md
 !LICENSE.txt
 
+# include gradle
+!gradle/
+!build.gradle
+!gradlew
+!gradlew.bat
+
 # include sourcecode
 !src/
 
