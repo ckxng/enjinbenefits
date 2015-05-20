@@ -19,7 +19,7 @@ import net.minecraftforge.common.config.Configuration;
 public class EnjinBenefitsMod {
     public static final String MODID = "enjinbenefits";
     public static final String NAME = "Enjin Benefits";
-    public static final String VERSION = "1.0";
+    public static final String VERSION = "0.1.0";
 
     /** The key provided by the Enjin admin panel - SECRET! */
     public static String enjinKey = "";
