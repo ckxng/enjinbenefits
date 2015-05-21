@@ -30,8 +30,11 @@ public class EnjinBenefitsMod {
     /** The API URL provided by the Enjin admin panel */
     public static String enjinApiUrl = "https://example.enjin.com/api/v1/api.php";
     
+    /** What we call points */
+    public static String pointsLabel = "Points";
+    
     /**
-     * 
+     * Load configuration data prior to module initialization
      * @param event
      */
     @EventHandler
@@ -42,52 +45,84 @@ public class EnjinBenefitsMod {
             enjinApiKey = config.getString("key", "api", enjinApiKey, 
             		"The key provided by the Enjin admin panel - SECRET!");
 
-            enjinApiUrl = config.getString("url", "api", enjinApiUrl, 
-            		"The API URL provided by the Enjin admin panel");
+            enjinApiUrl = config.getString("url", "api", "<AUTO>", 
+            		"The API URL provided by the Enjin admin panel.");
+
+            pointsLabel = config.getString("points", "localization", "<AUTO>", 
+            		"The API URL provided by the Enjin admin panel.  "
+            		+"Set to <AUTO> to retrieve the setting from Enjin API.");
             
             config.save();
             
     }
     
+    /**
+     * Setup the module
+     * @param event
+     */
     @EventHandler
     public void init(FMLInitializationEvent event)
     {
         System.out.println("Let's have fun with: " + this.NAME);
         
-        try {
-        	// generate stats API payload
-        	JSONObject enjinStatsPayload = new JSONObject()
-        			.put("jsonrpc","2.0")
-        			.put("id", (int)(Math.random()*1000))
-        			.put("params", new JSONObject().put("api_key",enjinApiKey))
-        			.put("method", "Stats.get");
-        	
-	        // connect to collect stats
-	        URL enjinStatsUrl = new URL(enjinApiUrl);
-	        HttpURLConnection enjinStatsConn = (HttpURLConnection)enjinStatsUrl.openConnection();
-	        enjinStatsConn.setRequestMethod("POST");
-	        enjinStatsConn.setDoOutput(true);
-	        enjinStatsConn.setRequestProperty("Content-Type", "application/json");
-	        
-	        // send stats payload
-	        System.out.println("Sending request: "+enjinStatsPayload.toString());
-	        OutputStreamWriter out = new OutputStreamWriter(
-	        		enjinStatsConn.getOutputStream());
-	        out.write(enjinStatsPayload.toString());
-	        out.flush();
-	        
-	        // read stats
-	        BufferedReader in = new BufferedReader(
-	        		new InputStreamReader(
-	        				enjinStatsConn.getInputStream()));
-	        String lineIn;
-	        while((lineIn = in.readLine()) != null) {
-	        	System.out.println(lineIn);
+        if(pointsLabel == "<AUTO>") {
+	        try {
+	        	// generate stats API payload
+	        	JSONObject enjinStatsPayload = new JSONObject()
+	        			.put("jsonrpc","2.0")
+	        			.put("id", (int)(Math.random()*1000))
+	        			.put("params", new JSONObject().put("api_key",enjinApiKey))
+	        			.put("method", "Stats.get");
+	        	
+		        // connect to collect stats
+		        URL enjinStatsUrl = new URL(enjinApiUrl);
+		        HttpURLConnection enjinStatsConn = (HttpURLConnection)enjinStatsUrl.openConnection();
+		        enjinStatsConn.setRequestMethod("POST");
+		        enjinStatsConn.setDoOutput(true);
+		        enjinStatsConn.setRequestProperty("Content-Type", "application/json");
+		        
+		        // send stats payload
+		        System.out.println("Sending request: "+enjinStatsPayload.toString());
+		        OutputStreamWriter out = new OutputStreamWriter(
+		        		enjinStatsConn.getOutputStream());
+		        out.write(enjinStatsPayload.toString());
+		        out.flush();
+		        
+		        // read stats
+		        BufferedReader in = new BufferedReader(
+		        		new InputStreamReader(
+		        				enjinStatsConn.getInputStream()));
+		        String lineIn;
+		        String enjinStatsResponse = "";
+		        while((lineIn = in.readLine()) != null) {
+		        	enjinStatsResponse += lineIn;
+		        }
+		        in.close();
+		        System.out.println("Recieved: "+enjinStatsResponse);
+		        
+		        // injest stats
+		        JSONObject enjinStatsData = new JSONObject(enjinStatsResponse);
+		        if(enjinStatsData.has("result")) {
+		        	if(enjinStatsData
+		        			.getJSONObject("result")
+		        			.has("Website Related")) {
+		        		if(enjinStatsData
+		        				.getJSONObject("result")
+		        				.getJSONObject("Website Related")
+		        				.has("points")) {
+		        			pointsLabel = enjinStatsData
+			        				.getJSONObject("result")
+			        				.getJSONObject("Website Related")
+			        				.getString("points");
+		        		}
+		        	}
+		        }
+		        
+	        } catch(Exception ex) {
+	        		System.err.println("Unable to fetch Enjin Stats from "+enjinApiUrl);
 	        }
-	        in.close();
-        } catch(Exception ex) {
-        		System.err.println("Unable to fetch Enjin Stats from "+enjinApiUrl);
         }
+		System.out.println("Points are called: " + pointsLabel);
         
     }
 }
