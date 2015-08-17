@@ -13,6 +13,10 @@ This software is ABANDONED.
 Interest in this mod tapered off, but the code still serves as a working 
 example of how to leverage the Engin API from inside a Minecraft mod.
 
+At the time the mod was abandoned it had two features:
+- Dynamically generated config file
+- A call to the Enjin API to determine what "Points" are called on this server
+
 # For Developers
 
 - Clone this repository into enjinbenefits/
