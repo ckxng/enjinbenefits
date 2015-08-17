@@ -6,6 +6,13 @@ features is to track points and manage donations for a server.  Unfortunately,
 Enjin does not yet support 1.7.10, but they do provide an API.  This is a very 
 simple mod that will allow me to use Enjin points on my 1.7.10 Forge server.
 
+# Status
+
+This software is ABANDONED.
+
+Interest in this mod tapered off, but the code still serves as a working 
+example of how to leverage the Engin API from inside a Minecraft mod.
+
 # For Developers
 
 - Clone this repository into enjinbenefits/
@@ -15,3 +22,7 @@ If you are using Eclipse, do this next:
 - Run `gradlew eclipse`
 - Open the workspace enjinbenefits/eclipse/
 
+# Copying
+
+enjinbenefits is licensed under the 2-CLAUSE BSD LICENSE.  See LICENSE.txt
+for details.
